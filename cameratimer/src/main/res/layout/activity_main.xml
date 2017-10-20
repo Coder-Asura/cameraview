@@ -52,12 +52,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="请输入拍照间隔时间（单位：秒）"
-            android:inputType="numberSigned"/>
+            android:inputType="numberSigned"
+            android:textColorHint="@android:color/white"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"/>
 
         <ImageButton
             android:id="@+id/btn_start"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:background="@drawable/ic_camera"
             android:padding="20dp"/>
     </LinearLayout>

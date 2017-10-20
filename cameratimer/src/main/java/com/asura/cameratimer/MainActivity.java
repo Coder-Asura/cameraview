@@ -60,6 +60,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * 实现间隔一定时间（时间可自定义）定时拍照，并压缩保存至相册
+ */
 public class MainActivity extends AppCompatActivity implements
         ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -174,6 +177,8 @@ public class MainActivity extends AppCompatActivity implements
                             Toast.LENGTH_SHORT).show();
                 }
                 // No need to start camera here; it is handled by onResume
+                break;
+            default:
                 break;
         }
     }
