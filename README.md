@@ -57,3 +57,6 @@ You can see a complete usage in the demo app.
 ## Contribution
 
 See [CONTRIBUTING.md](/CONTRIBUTING.md).
+
+## 定时拍照
+引用谷歌的 CameraView library，精简 demo 中的页面配置项，使用 Handler 和 Timer 实现定时拍照功能。定时时间可以自定义，且照片统一压缩保存至内存卡中。
