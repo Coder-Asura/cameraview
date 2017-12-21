@@ -28,6 +28,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:background="@android:color/black"
+        app:autoFocus="false"
         app:flash="off"/>
 
     <TextView
