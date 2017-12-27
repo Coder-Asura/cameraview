@@ -43,7 +43,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -52,6 +54,7 @@ import android.widget.Toast;
 import com.google.android.cameraview.CameraView;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -75,8 +78,11 @@ public class MainActivity extends AppCompatActivity implements
     private CameraView mCameraView;
     private TextView tv_time;
     private EditText et_countDownTime;
+    private EditText et_countPic;
     private ImageButton btn_start;
-    private int countTime = 3;
+    private Button btn_stop;
+    private int countTime = 30;
+    private int countPic = 200;
 
     private Handler mBackgroundHandler;
     private CountDownTimer mCountDownTimer;
@@ -91,16 +97,58 @@ public class MainActivity extends AppCompatActivity implements
         }
         tv_time = (TextView) findViewById(R.id.tv_time);
         et_countDownTime = (EditText) findViewById(R.id.et_countDownTime);
+        et_countPic = (EditText) findViewById(R.id.et_countPic);
         btn_start = (ImageButton) findViewById(R.id.btn_start);
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!TextUtils.isEmpty(et_countDownTime.getText().toString())) {
                     countTime = Integer.parseInt(et_countDownTime.getText().toString());
+                } else {
+                    et_countDownTime.setText("" + countTime);
                 }
+                if (!TextUtils.isEmpty(et_countPic.getText().toString())) {
+                    countPic = Integer.parseInt(et_countPic.getText().toString());
+                } else {
+                    et_countPic.setText("" + countPic);
+                }
+                et_countDownTime.setFocusable(false);
+                et_countDownTime.setFocusableInTouchMode(false);
+                et_countPic.setFocusable(false);
+                et_countPic.setFocusableInTouchMode(false);
                 mCountDownTimer = new CountDownTimer(new ReFreshHandler(MainActivity.this),
                         countTime);
                 mCountDownTimer.start();
+                btn_start.setVisibility(View.INVISIBLE);
+                btn_stop.setVisibility(View.VISIBLE);
+                Toast toast = Toast.makeText(MainActivity.this,
+                        "开始拍摄！\n每隔   " + countTime + "  秒拍摄一次\n一个文件夹存放  " + countPic + "  张照片",
+                        Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+        });
+        btn_stop = (Button) findViewById(R.id.btn_stop);
+        btn_stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(et_countPic.getText().toString())) {
+                    countPic = Integer.parseInt(et_countPic.getText().toString());
+                }
+                if (mCountDownTimer != null && !mCountDownTimer.isStop()) {
+                    mCountDownTimer.cancelTimer();
+                }
+                tv_time.setText("");
+                btn_start.setVisibility(View.VISIBLE);
+                btn_stop.setVisibility(View.INVISIBLE);
+                et_countDownTime.setFocusableInTouchMode(true);
+                et_countDownTime.setFocusable(true);
+                et_countPic.setFocusableInTouchMode(true);
+                et_countPic.setFocusable(true);
+                et_countDownTime.requestFocus();
+                Toast toast = Toast.makeText(MainActivity.this, "拍摄结束!", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
             }
         });
     }
@@ -221,9 +269,40 @@ public class MainActivity extends AppCompatActivity implements
                     try {
                         File file = new File(
                                 Environment.getExternalStorageDirectory().getAbsolutePath()
-                                        + "/LiteTrace");
+                                        + "/LiteTrace1");
                         if (!file.exists()) {
-                            file.mkdir();
+                            file.mkdirs();
+                        }
+                        File[] files = file.listFiles(new FileFilter() {
+                            @Override
+                            public boolean accept(File pathname) {
+                                return pathname.isDirectory();
+                            }
+                        });
+                        if (files.length > 0) {
+                            File lastFile = files[files.length - 1];
+                            if (lastFile.isDirectory()) {
+                                if (lastFile.list().length >= countPic) {
+                                    Log.d("lxd", "超过" + countPic + "张，再建一个文件夹");
+                                    String fileName = getCurrentDateTime("yyyyMMdd-HHmmss");
+                                    file = new File(
+                                            file.getAbsolutePath() + File.separator + fileName);
+                                    if (!file.exists()) {
+                                        file.mkdirs();
+                                    }
+                                } else {
+                                    file = lastFile;
+                                    Log.d("lxd", "没超过" + countPic + "张，继续用");
+                                }
+                            }
+                        } else {
+                            Log.d("lxd", "没有文件夹");
+                            String fileName = getCurrentDateTime("yyyyMMdd-HHmmss");
+                            file = new File(
+                                    file.getAbsolutePath() + File.separator + fileName);
+                            if (!file.exists()) {
+                                file.mkdirs();
+                            }
                         }
                         File file2 = new File(file, getCurrentDateTime("MMdd-HHmmss") + ".jpg");
                         fos = new FileOutputStream(file2);

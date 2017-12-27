@@ -31,39 +31,94 @@
         app:autoFocus="false"
         app:flash="off"/>
 
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text=""
-        android:textColor="@android:color/white"
-        android:textSize="90sp"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="30dp"
         android:gravity="bottom|center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <EditText
-            android:id="@+id/et_countDownTime"
+        <TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="请输入拍照间隔时间（单位：秒）"
-            android:inputType="numberSigned"
-            android:textColorHint="@android:color/white"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:textColor="@android:color/white"
-            android:textSize="20sp"/>
+            android:textSize="90sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拍照间隔"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/et_countDownTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:hint="拍照间隔时间（默认30秒）"
+                android:inputType="numberSigned"
+                android:textColor="@android:color/white"
+                android:textColorHint="#efefef"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="照片数量"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/et_countPic"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:hint="每个文件夹照片数量（默认200张）"
+                android:inputType="numberSigned"
+                android:textColor="@android:color/white"
+                android:textColorHint="#efefef"
+                android:textSize="14sp"/>
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/btn_start"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/ic_camera"
             android:padding="20dp"/>
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="停止拍摄"
+            android:textColor="#ff0000"
+            android:textSize="14sp"
+            android:visibility="invisible"/>
     </LinearLayout>
 
 </FrameLayout>
